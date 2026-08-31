@@ -87,4 +87,4 @@ Once configured, students can enroll in courses, take quizzes, and view their re
 
 1. Clone the repository to your local machine:
    ```bash
-   git clone https://github.com/munshi-rishad/EduQuiz-Online-Quiz-Management-System.git
+   https://github.com/munshi-rishad/WebTech-EduQuiz-Online-Quiz-Management-System.git
