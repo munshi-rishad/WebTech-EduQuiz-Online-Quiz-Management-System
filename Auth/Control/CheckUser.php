@@ -1,5 +1,7 @@
 <?php
-include "../../model/DatabaseConnection.php";
+// AJAX: called while typing on the Registration page.
+// Prints whether the username is free or already used.
+include_once "../../model/DatabaseConnection.php";
 $username=$_POST["username"] ?? "";
 
 if(!$username)

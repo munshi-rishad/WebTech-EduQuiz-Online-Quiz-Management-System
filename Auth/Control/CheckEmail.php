@@ -1,5 +1,7 @@
 <?php
-include "../../model/DatabaseConnection.php";
+// AJAX: called while typing on the Registration page.
+// Prints whether the email is free or already used.
+include_once "../../model/DatabaseConnection.php";
 $email=$_POST["email"] ?? "";
 
 if(!$email)

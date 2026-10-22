@@ -345,6 +345,12 @@ tbody tr:hover{
     font-size:12px;
 }
 
+.badge.fail{
+    border-color:#fca5a5;
+    background:#fef2f2;
+    color:#b91c1c;
+}
+
 .question{
     padding:15px 0;
     border-bottom:1px solid #d7dde6;

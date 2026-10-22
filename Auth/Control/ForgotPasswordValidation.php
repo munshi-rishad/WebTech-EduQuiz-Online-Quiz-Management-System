@@ -1,5 +1,7 @@
 <?php
-include "../../model/DatabaseConnection.php";
+// Controller for the Reset Password page:
+// the user proves who they are with email + username and sets a new password.
+include_once "../../model/DatabaseConnection.php";
 $message="";
 
 if($_SERVER["REQUEST_METHOD"]=="POST")
@@ -13,6 +15,10 @@ if($_SERVER["REQUEST_METHOD"]=="POST")
     {
         $message="All fields are required";
     }
+    else if(strlen($password)<4)
+    {
+        $message="Password must be at least 4 characters";
+    }
     else if($password!=$confirm)
     {
         $message="Passwords do not match";
@@ -24,11 +30,12 @@ if($_SERVER["REQUEST_METHOD"]=="POST")
         $email=$connection->real_escape_string($email);
         $username=$connection->real_escape_string($username);
         $password=$connection->real_escape_string($password);
-        $result=$connection->query("SELECT * FROM users WHERE email='$email' AND username='$username' AND is_active=1");
+        $result=$database->FindUserForReset($connection,$email,$username);
 
         if($result->num_rows==1)
         {
-            $connection->query("UPDATE users SET password='$password' WHERE email='$email' AND username='$username'");
+            $user=$result->fetch_assoc();
+            $database->UpdatePassword($connection,(int)$user["id"],$password);
             Header("Location:Login.php");
             exit();
         }

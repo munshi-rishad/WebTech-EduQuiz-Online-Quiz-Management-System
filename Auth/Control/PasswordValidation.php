@@ -1,12 +1,9 @@
 <?php
-include "../../model/DatabaseConnection.php";
+// Controller for the Change Password page
+include_once "../../model/DatabaseConnection.php";
+include_once "Session.php";
 session_start();
-
-if(!isset($_SESSION["user_id"]))
-{
-    Header("Location:Login.php");
-    exit();
-}
+RequireLogin();
 
 $message="";
 $success="";
@@ -19,8 +16,7 @@ if($_SERVER["REQUEST_METHOD"]=="POST")
     $old=trim($_POST["old"] ?? "");
     $new=trim($_POST["new"] ?? "");
     $confirm=trim($_POST["confirm"] ?? "");
-    $result=$connection->query("SELECT password FROM users WHERE id=$id");
-    $user=$result->fetch_assoc();
+    $user=$database->GetUserById($connection,$id);
 
     if($old!=$user["password"])
     {
@@ -36,13 +32,10 @@ if($_SERVER["REQUEST_METHOD"]=="POST")
     }
     else
     {
-        $new=$connection->real_escape_string($new);
-        $connection->query("UPDATE users SET password='$new' WHERE id=$id");
+        $database->UpdatePassword($connection,$id,$connection->real_escape_string($new));
         $success="Password changed successfully";
     }
 }
 
-if($_SESSION["role"]=="admin") $home="../MainPage.php";
-else if($_SESSION["role"]=="instructor") $home="../../Instructor/MainPage.php";
-else $home="../../Student/MainPage.php";
+$home=HomePage($_SESSION["role"]);
 ?>

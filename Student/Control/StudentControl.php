@@ -1,60 +1,102 @@
 <?php
-include "../../model/DatabaseConnection.php";
+// Controller for the Student panel.
+// 1) POST (Enroll / Submit Quiz): save the data, then go back to the page.
+// 2) GET (included by View/Student.php): load the data that the page shows.
+include_once "../../model/StudentModel.php";
 session_start();
 
 if(!isset($_SESSION["user_id"]) || $_SESSION["role"]!="student")
 {
-    Header("Location:../../Admin/View/Login.php");
+    Header("Location:../../Auth/View/Login.php");
     exit();
 }
 
-$database=new DatabaseConnection();
-$connection=$database->OpenCon();
-$mode=$_POST["mode"] ?? "";
+$model=new StudentModel();
+$connection=$model->OpenCon();
 $id=(int)$_SESSION["user_id"];
 
-if($mode=="enroll")
+// ---------- 1) Button actions ----------
+if($_SERVER["REQUEST_METHOD"]=="POST")
 {
-    $course=(int)($_POST["course_id"] ?? 0);
-    $check=$connection->query("SELECT * FROM enrollments WHERE student_id=$id AND course_id=$course");
+    $mode=$_POST["mode"] ?? "";
 
-    if($check->num_rows==0)
+    if($mode=="enroll")
     {
-        $connection->query("INSERT INTO enrollments(student_id,course_id) VALUES($id,$course)");
-    }
-    Header("Location:../View/Student.php?action=courses");
-}
-else if($mode=="submit_quiz")
-{
-    $quiz=(int)($_POST["quiz_id"] ?? 0);
-    $check=$connection->query("SELECT q.id FROM quizzes q,enrollments e WHERE q.course_id=e.course_id AND q.id=$quiz AND q.is_published=1 AND e.student_id=$id");
+        $course=(int)($_POST["course_id"] ?? 0);
 
-    if($check->num_rows==0)
-    {
-        echo "Quiz unavailable";
-        exit();
-    }
-
-    $questions=$connection->query("SELECT * FROM questions WHERE quiz_id=$quiz ORDER BY id");
-    $score=0;
-    $total=0;
-
-    while($row=$questions->fetch_assoc())
-    {
-        $total=$total+$row["mark"];
-        $answer=$_POST["q".$row["id"]] ?? "";
-
-        if($answer==$row["correct_option"])
+        if($model->CourseExists($connection,$course) && !$model->IsEnrolled($connection,$id,$course))
         {
-            $score=$score+$row["mark"];
+            $model->Enroll($connection,$id,$course);
         }
+        Header("Location:../View/Student.php?action=courses");
     }
+    else if($mode=="submit_quiz")
+    {
+        $quiz=(int)($_POST["quiz_id"] ?? 0);
+        $questions=$model->GetQuestions($connection,$quiz);
 
-    $connection->query("INSERT INTO attempts(quiz_id,student_id,score,total) VALUES($quiz,$id,$score,$total)");
-    Header("Location:../View/Student.php?action=results");
+        // the quiz must be published, from my course, and have questions
+        if(!$model->GetQuizForStudent($connection,$id,$quiz) || count($questions)==0)
+        {
+            Header("Location:../View/Student.php?action=quizzes");
+            exit();
+        }
+
+        // Check every answer and add up the marks
+        $score=0;
+        $total=0;
+        foreach($questions as $row)
+        {
+            $total=$total+$row["mark"];
+            $answer=$_POST["q".$row["id"]] ?? "";
+
+            if($answer==$row["correct_option"])
+            {
+                $score=$score+$row["mark"];
+            }
+        }
+
+        $model->SaveAttempt($connection,$quiz,$id,$score,$total);
+        Header("Location:../View/Student.php?action=results");
+    }
+    else
+    {
+        Header("Location:../View/Student.php?action=dashboard");
+    }
+    exit();
+}
+
+// ---------- 2) Data for the page ----------
+$action=$_GET["action"] ?? "dashboard";
+
+if($action=="dashboard")
+{
+    $totalCourses=$model->CountMyCourses($connection,$id);
+    $totalAttempts=$model->CountMyAttempts($connection,$id);
+    $average=$model->GetAverage($connection,$id);
+}
+else if($action=="courses")
+{
+    $courses=$model->GetCourses($connection,$id);
+}
+else if($action=="quizzes")
+{
+    $takeId=(int)($_GET["quiz_id"] ?? 0);
+
+    if($takeId!=0)
+    {
+        // "Take" button: open one quiz
+        $quiz=$model->GetQuizForStudent($connection,$id,$takeId);
+        $questions=$quiz ? $model->GetQuestions($connection,$takeId) : array();
+    }
+    else
+    {
+        $quizzes=$model->GetMyQuizzes($connection,$id);
+    }
 }
 else
 {
-    Header("Location:../View/Student.php?action=dashboard");
+    $action="results";
+    $results=$model->GetMyResults($connection,$id);
 }
 ?>

@@ -1,5 +1,6 @@
 <?php
-include "../../model/DatabaseConnection.php";
+// Controller for the Registration page
+include_once "../../model/DatabaseConnection.php";
 $message="";
 
 if($_SERVER["REQUEST_METHOD"]=="POST")
@@ -17,9 +18,18 @@ if($_SERVER["REQUEST_METHOD"]=="POST")
     {
         $message="Required fields cannot be empty";
     }
-    else if($role!="admin" && $role!="instructor" && $role!="student")
+    else if($role!="student" && $role!="instructor")
     {
+        // Only students and instructors can sign up. Admin accounts are added in the database.
         $message="Invalid account type";
+    }
+    else if(strlen($username)<3)
+    {
+        $message="Username must be at least 3 characters";
+    }
+    else if(!filter_var($email,FILTER_VALIDATE_EMAIL))
+    {
+        $message="Enter a valid email";
     }
     else if(strlen($password)<4)
     {
@@ -40,36 +50,27 @@ if($_SERVER["REQUEST_METHOD"]=="POST")
         $phone=$connection->real_escape_string($phone);
         $department=$connection->real_escape_string($department);
         $password=$connection->real_escape_string($password);
-        $role=$connection->real_escape_string($role);
 
-        $checkUsername=$database->CheckUsername($connection,$username);
-        $checkEmail=$database->CheckEmail($connection,$email);
-        $checkPhone=$database->CheckPhone($connection,$phone);
-
-        if($checkUsername->num_rows>0)
+        if($database->CheckUsername($connection,$username)->num_rows>0)
         {
             $message="Username already exists";
         }
-        else if($checkEmail->num_rows>0)
+        else if($database->CheckEmail($connection,$email)->num_rows>0)
         {
             $message="Email already exists";
         }
-        else if($phone!="" && $checkPhone->num_rows>0)
+        else if($phone!="" && $database->CheckPhone($connection,$phone)->num_rows>0)
         {
             $message="Phone number already exists";
         }
+        else if($database->AddUser($connection,$name,$username,$email,$password,$phone,$department,$role))
+        {
+            Header("Location:Login.php");
+            exit();
+        }
         else
         {
-            $sql="INSERT INTO users(name,username,email,password,phone,department,role) VALUES('$name','$username','$email','$password','$phone','$department','$role')";
-            if($connection->query($sql))
-            {
-                Header("Location:Login.php");
-                exit();
-            }
-            else
-            {
-                $message="Registration failed";
-            }
+            $message="Registration failed";
         }
     }
 }

@@ -1,20 +1,20 @@
 <?php
-include "../../model/DatabaseConnection.php";
+// Controller for the Login page
+include_once "../../model/DatabaseConnection.php";
+include_once "Session.php";
 session_start();
 
+// Already logged in? Go straight to the dashboard
 if(isset($_SESSION["user_id"]))
 {
-    if($_SESSION["role"]=="admin") Header("Location:../MainPage.php");
-    else if($_SESSION["role"]=="instructor") Header("Location:../../Instructor/MainPage.php");
-    else Header("Location:../../Student/MainPage.php");
+    Header("Location:".HomePage($_SESSION["role"]));
     exit();
 }
 
 $email="";
-$password="";
 $message="";
-$remember=false;
 
+// "Remember Me" fills the email box
 if(isset($_COOKIE["remember_email"]))
 {
     $email=$_COOKIE["remember_email"];
@@ -35,9 +35,9 @@ if($_SERVER["REQUEST_METHOD"]=="POST")
         $database=new DatabaseConnection();
         $connection=$database->OpenCon();
 
-        $email=$connection->real_escape_string($email);
-        $password=$connection->real_escape_string($password);
-        $result=$database->CheckUser($connection,$email,$password);
+        $safeEmail=$connection->real_escape_string($email);
+        $safePassword=$connection->real_escape_string($password);
+        $result=$database->CheckUser($connection,$safeEmail,$safePassword);
 
         if($result->num_rows==1)
         {
@@ -48,16 +48,14 @@ if($_SERVER["REQUEST_METHOD"]=="POST")
 
             if($remember)
             {
-                setcookie("remember_email",$email,time()+60*60*24*7,"/");
+                setcookie("remember_email",$email,time()+60*60*24*7,"/");   // 7 days
             }
             else
             {
-                setcookie("remember_email","",time()-3600,"/");
+                setcookie("remember_email","",time()-3600,"/");             // delete the cookie
             }
 
-            if($user["role"]=="admin") Header("Location:../MainPage.php");
-            else if($user["role"]=="instructor") Header("Location:../../Instructor/MainPage.php");
-            else Header("Location:../../Student/MainPage.php");
+            Header("Location:".HomePage($user["role"]));
             exit();
         }
         else

@@ -50,7 +50,6 @@
                 <label>Account type</label>
                 <select name="role">
                     <option value="student">Student</option>
-                    <option value="admin">Admin</option>
                     <option value="instructor">Instructor</option>
                 </select>
             </div>

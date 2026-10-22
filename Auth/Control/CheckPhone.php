@@ -1,5 +1,7 @@
 <?php
-include "../../model/DatabaseConnection.php";
+// AJAX: called while typing on the Registration page.
+// Prints whether the phone number is free or already used.
+include_once "../../model/DatabaseConnection.php";
 $phone=$_POST["phone"] ?? "";
 
 if(!$phone)
