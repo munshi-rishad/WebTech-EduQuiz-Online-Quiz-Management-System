@@ -13,9 +13,12 @@ students enroll and take quizzes, and admins manage users and courses.
 - **Instructor:** create courses and quizzes, add questions, publish quizzes, see student results with Pass / Fail (pass mark 40%).
 - **Admin:** activate / deactivate / delete users, remove courses, see a system report.
 
-## Built With
+## Technologies Used
 
-PHP · MySQL · HTML · CSS · JavaScript (AJAX) · XAMPP — following the **MVC** pattern.
+- PHP 8 and MySQL
+- HTML, CSS and JavaScript (AJAX)
+- XAMPP (Apache + MySQL)
+- MVC (Model–View–Controller) architecture
 
 ## Project Structure (MVC)
 
@@ -73,11 +76,9 @@ git clone https://github.com/munshi-rishad/WebTech-EduQuiz-Online-Quiz-Managemen
 
 ### Demo Accounts
 
-| Role | Email | Password |
-|------|-------|----------|
-| Admin | admin@eduquiz.local | admin123 |
-| Instructor | instructor@eduquiz.local | instructor123 |
-| Student | student@eduquiz.local | student123 |
+- **Admin:** `admin@eduquiz.local` / `admin123`
+- **Instructor:** `instructor@eduquiz.local` / `instructor123`
+- **Student:** `student@eduquiz.local` / `student123`
 
 New Student and Instructor accounts can be created from the **Register** page.
 
@@ -87,75 +88,82 @@ The report is written in LaTeX: [report/EduQuiz_Report.tex](report/EduQuiz_Repor
 
 ## Screenshots
 
-### Login & Registration
+### 1. Login Page
 
-<table>
-  <tr>
-    <td width="50%" align="center"><img src="Screenshots/login_page.png" alt="Login page"><br><sub>Login page</sub></td>
-    <td width="50%" align="center"><img src="Screenshots/login_error.png" alt="Wrong email or password"><br><sub>Wrong email or password</sub></td>
-  </tr>
-  <tr>
-    <td width="50%" align="center"><img src="Screenshots/registration_page.png" alt="Create account (Student or Instructor)"><br><sub>Create account (Student or Instructor)</sub></td>
-    <td width="50%" align="center"><img src="Screenshots/registration_ajax_check.png" alt="Live AJAX check for username, email and phone"><br><sub>Live AJAX check for username, email and phone</sub></td>
-  </tr>
-</table>
+One login page for Admin, Instructor and Student, with Remember Me and Forgot password.
 
-### Account
+<p align="center">
+  <img src="Screenshots/login_page.png" alt="Login Page" width="800">
+</p>
 
-<table>
-  <tr>
-    <td width="50%" align="center"><img src="Screenshots/forgot_password.png" alt="Reset password with email + username"><br><sub>Reset password with email + username</sub></td>
-    <td width="50%" align="center"><img src="Screenshots/student_profile.png" alt="View and edit profile, delete account"><br><sub>View and edit profile, delete account</sub></td>
-  </tr>
-  <tr>
-    <td width="50%" align="center"><img src="Screenshots/student_change_password.png" alt="Change password"><br><sub>Change password</sub></td>
-    <td width="50%"></td>
-  </tr>
-</table>
+### 2. Registration with Live AJAX Check
 
-### Student Panel
+Create a Student or Instructor account; username, email and phone are checked while typing.
 
-<table>
-  <tr>
-    <td width="50%" align="center"><img src="Screenshots/student_dashboard.png" alt="Dashboard: courses, attempts and average score"><br><sub>Dashboard: courses, attempts and average score</sub></td>
-    <td width="50%" align="center"><img src="Screenshots/student_available_courses.png" alt="Browse courses and enroll"><br><sub>Browse courses and enroll</sub></td>
-  </tr>
-  <tr>
-    <td width="50%" align="center"><img src="Screenshots/student_published_quizzes.png" alt="Published quizzes of enrolled courses"><br><sub>Published quizzes of enrolled courses</sub></td>
-    <td width="50%" align="center"><img src="Screenshots/student_take_quiz.png" alt="Take a multiple-choice quiz"><br><sub>Take a multiple-choice quiz</sub></td>
-  </tr>
-  <tr>
-    <td width="50%" align="center"><img src="Screenshots/student_quiz_result_history.png" alt="Result history with score and percent"><br><sub>Result history with score and percent</sub></td>
-    <td width="50%"></td>
-  </tr>
-</table>
+<p align="center">
+  <img src="Screenshots/registration_ajax_check.png" alt="Registration with Live AJAX Check" width="800">
+</p>
 
-### Instructor Panel
+### 3. Student Dashboard
 
-<table>
-  <tr>
-    <td width="50%" align="center"><img src="Screenshots/instructor_dashboard.png" alt="Dashboard: my courses, quizzes and attempts"><br><sub>Dashboard: my courses, quizzes and attempts</sub></td>
-    <td width="50%" align="center"><img src="Screenshots/instructor_manage_courses.png" alt="Create and delete courses"><br><sub>Create and delete courses</sub></td>
-  </tr>
-  <tr>
-    <td width="50%" align="center"><img src="Screenshots/instructor_manage_quizzes.png" alt="Create quizzes and publish / unpublish them"><br><sub>Create quizzes and publish / unpublish them</sub></td>
-    <td width="50%" align="center"><img src="Screenshots/instructor_create_quiz_add_questions.png" alt="Questions of a quiz and the Add Question form"><br><sub>Questions of a quiz and the Add Question form</sub></td>
-  </tr>
-  <tr>
-    <td width="50%" align="center"><img src="Screenshots/instructor_student_quiz_results.png" alt="Student results with Pass / Fail"><br><sub>Student results with Pass / Fail</sub></td>
-    <td width="50%"></td>
-  </tr>
-</table>
+Enrolled courses, quiz attempts and average score.
 
-### Admin Panel
+<p align="center">
+  <img src="Screenshots/student_dashboard.png" alt="Student Dashboard" width="800">
+</p>
 
-<table>
-  <tr>
-    <td width="50%" align="center"><img src="Screenshots/admin_dashboard.png" alt="Dashboard: users, courses and attempts"><br><sub>Dashboard: users, courses and attempts</sub></td>
-    <td width="50%" align="center"><img src="Screenshots/admin_user_management.png" alt="Activate / deactivate or delete users"><br><sub>Activate / deactivate or delete users</sub></td>
-  </tr>
-  <tr>
-    <td width="50%" align="center"><img src="Screenshots/admin_course_control.png" alt="See and remove courses"><br><sub>See and remove courses</sub></td>
-    <td width="50%" align="center"><img src="Screenshots/admin_system_report.png" alt="System report and recent attempts"><br><sub>System report and recent attempts</sub></td>
-  </tr>
-</table>
+### 4. Browse and Enroll in Courses
+
+Students see every course and enroll with one click.
+
+<p align="center">
+  <img src="Screenshots/student_available_courses.png" alt="Browse and Enroll in Courses" width="800">
+</p>
+
+### 5. Take a Quiz
+
+Multiple-choice quiz of an enrolled course.
+
+<p align="center">
+  <img src="Screenshots/student_take_quiz.png" alt="Take a Quiz" width="800">
+</p>
+
+### 6. Quiz Result History
+
+Score, percent and date of every quiz the student took.
+
+<p align="center">
+  <img src="Screenshots/student_quiz_result_history.png" alt="Quiz Result History" width="800">
+</p>
+
+### 7. Instructor – Manage Quizzes and Questions
+
+Create quizzes, publish them, see the questions of a quiz and add new questions.
+
+<p align="center">
+  <img src="Screenshots/instructor_create_quiz_add_questions.png" alt="Instructor – Manage Quizzes and Questions" width="800">
+</p>
+
+### 8. Instructor – Student Results
+
+Results of the instructor's quizzes with Pass / Fail (pass mark 40%).
+
+<p align="center">
+  <img src="Screenshots/instructor_student_quiz_results.png" alt="Instructor – Student Results" width="800">
+</p>
+
+### 9. Admin – User Management
+
+Activate, deactivate or delete user accounts.
+
+<p align="center">
+  <img src="Screenshots/admin_user_management.png" alt="Admin – User Management" width="800">
+</p>
+
+### 10. Admin – System Report
+
+Totals of students, instructors, courses, quizzes and attempts, plus recent attempts.
+
+<p align="center">
+  <img src="Screenshots/admin_system_report.png" alt="Admin – System Report" width="800">
+</p>
