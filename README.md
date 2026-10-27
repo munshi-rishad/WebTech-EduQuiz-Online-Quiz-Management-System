@@ -4,6 +4,8 @@ A PHP and MySQL web application for the **Web Technologies (CSC 3215)** course.
 Admins, Instructors and Students log in to their own panel: instructors create courses and quizzes,
 students enroll and take quizzes, and admins manage users and courses.
 
+**Semester:** Summer 2025-2026 (Web Technologies)
+
 ## Features
 
 - One login and registration system for every user (Student or Instructor sign-up).
